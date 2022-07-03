@@ -2,18 +2,17 @@ from flask_sqlalchemy import SQLAlchemy
 
 db = SQLAlchemy()
 
-class User(db.Model):
+class CalendarAvailability(db.Model): 
     id = db.Column(db.Integer, primary_key=True)
-    email = db.Column(db.String(120), unique=True, nullable=False)
-    password = db.Column(db.String(80), unique=False, nullable=False)
-    is_active = db.Column(db.Boolean(), unique=False, nullable=False)
-
-    def __repr__(self):
-        return f'<User {self.email}>'
+    date = db.Column(db.Date)
+    time = db.Column(db.Time)
+    is_available = db.Column(db.Boolean)
+    
 
     def serialize(self):
         return {
             "id": self.id,
-            "email": self.email,
-            # do not serialize the password, its a security breach
+            "date": self.date.strftime("%Y-%m-%d") if self.date is not None else None,
+            "time": self.time.strftime("%H:%M") if self.time is not None else None,
+            "is_available": self.is_available,
         }
